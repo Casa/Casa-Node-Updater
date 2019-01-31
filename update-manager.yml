@@ -1,0 +1,34 @@
+version: '2.4'
+
+services:
+  update-manager:
+    container_name: update-manager
+    hostname: update-manager
+    restart: always
+    image: casanode${REPOSITORY_ADDENDUM}/update-manager:${TAG}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+      - /usr/local/casa/applications:/usr/local/casa/applications
+      - accounts:/accounts
+    ports:
+      - "3001:3000"
+    environment:
+      - SYSTEM_USER
+      - TAG
+    networks:
+      - update-manager
+    labels:
+      - casa=persist
+    mem_limit: 256m
+    memswap_limit: -1 # unlimited access to device swap
+    oom_kill_disable: true
+
+networks:
+  update-manager:
+
+volumes:
+  accounts:
+    labels:
+      - casa=persist

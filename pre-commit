@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Checking style, apply linting!"
+eslint . --ext .js
