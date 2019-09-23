@@ -9,6 +9,7 @@ phases:
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
+      - npm --build-from-source install bcrypt@3.0.6
       - npm install
   install:
     commands:
