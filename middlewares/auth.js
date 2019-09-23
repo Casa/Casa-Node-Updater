@@ -18,6 +18,15 @@ passport.use(BASIC_AUTH, new BasicStrategy(function(username, password, next) {
   return next(null, {password: password, username: SYSTEM_USER}); // eslint-disable-line object-shorthand
 }));
 
+// Override the authorization header with password that is in the body of the request.
+function convertReqBodyToBasicAuth(req, res, next) {
+  if (req.body.password) {
+    req.headers.authorization = 'Basic ' + Buffer.from(SYSTEM_USER + ':' + req.body.password).toString('base64');
+  }
+
+  next();
+}
+
 function basic(req, res, next) {
   passport.authenticate(BASIC_AUTH, {session: false}, function(error, user) {
 
@@ -53,5 +62,6 @@ function basic(req, res, next) {
 
 module.exports = {
   basic,
+  convertReqBodyToBasicAuth,
 };
 
